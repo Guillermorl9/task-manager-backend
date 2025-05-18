@@ -1,7 +1,7 @@
 package com.example.taskmanagerbackend.controller;
 
-import com.example.taskmanagerbackend.model.User;
-import com.example.taskmanagerbackend.repository.UserRepository;
+import com.example.taskmanagerbackend.model.UserApp;
+import com.example.taskmanagerbackend.repository.UserAppRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +13,17 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserAppRepository userAppRepository;
 
     // Endpoint para obtener todos los usuarios
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserApp> getAllUsers() {
+        return userAppRepository.findAll();
     }
 
     // Endpoint para agregar un nuevo usuario
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    public UserApp createUser(@RequestBody UserApp userApp) {
+        return userAppRepository.save(userApp);
     }
 }

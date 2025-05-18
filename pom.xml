@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>task-manager-backend</artifactId>
+	<artifactId>taskApp-manager-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>task-manager-backend</name>
-	<description>task-manager-backend</description>
+	<name>taskApp-manager-backend</name>
+	<description>taskApp-manager-backend</description>
 	<url/>
 	<licenses>
 		<license/>
