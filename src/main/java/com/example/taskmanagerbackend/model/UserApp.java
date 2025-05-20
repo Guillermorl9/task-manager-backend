@@ -17,6 +17,6 @@ public class UserApp {
     private String email;
     private String photoUrl;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryApp> categories = new ArrayList<>();
 }

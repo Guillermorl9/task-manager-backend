@@ -18,6 +18,7 @@ public class TaskListApp {
     @ManyToOne
     private CategoryApp category;
 
-    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "taskListApp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskApp> tasks = new ArrayList<>();
+
 }
