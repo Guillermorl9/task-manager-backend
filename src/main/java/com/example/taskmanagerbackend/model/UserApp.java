@@ -1,4 +1,5 @@
 package com.example.taskmanagerbackend.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -18,5 +19,6 @@ public class UserApp {
     private String photoUrl;
 
     @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CategoryApp> categories = new ArrayList<>();
 }

@@ -1,5 +1,8 @@
 package com.example.taskmanagerbackend.service;
 
+import com.example.taskmanagerbackend.model.CategoryApp;
+import com.example.taskmanagerbackend.model.TaskApp;
+import com.example.taskmanagerbackend.model.TaskListApp;
 import com.example.taskmanagerbackend.model.UserApp;
 import com.example.taskmanagerbackend.repository.UserAppRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ public class UserAppService {
     }
 
     public UserApp createUser(UserApp userApp) {
+        setParentReferences(userApp);
         return userAppRepository.save(userApp);
     }
 
@@ -25,4 +29,23 @@ public class UserAppService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userAppRepository.delete(userApp);
     }
+
+    private void setParentReferences(UserApp user) {
+        if (user.getCategories() != null) {
+            for (CategoryApp category : user.getCategories()) {
+                category.setUserApp(user);
+                if (category.getLists() != null) {
+                    for (TaskListApp list : category.getLists()) {
+                        list.setCategory(category);
+                        if (list.getTasks() != null) {
+                            for (TaskApp task : list.getTasks()) {
+                                task.setTaskListApp(list);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+

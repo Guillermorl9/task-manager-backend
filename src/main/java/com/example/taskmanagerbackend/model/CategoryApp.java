@@ -1,4 +1,7 @@
 package com.example.taskmanagerbackend.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -17,8 +20,10 @@ public class CategoryApp {
     private String icon;
 
     @ManyToOne
+    @JsonBackReference
     private UserApp userApp;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<TaskListApp> lists = new ArrayList<>();
 }

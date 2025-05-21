@@ -1,4 +1,5 @@
 package com.example.taskmanagerbackend.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,5 +19,6 @@ public class TaskApp {
     private boolean completed;
 
     @ManyToOne
+    @JsonBackReference
     private TaskListApp taskListApp;
 }
