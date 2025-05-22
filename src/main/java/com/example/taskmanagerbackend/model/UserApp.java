@@ -17,6 +17,7 @@ public class UserApp {
     private String name;
     private String email;
     private String photoUrl;
+    private String password;
 
     @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
