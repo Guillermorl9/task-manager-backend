@@ -16,14 +16,21 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserApp registerUser(String email, String password) {
+    public UserApp registerUser(String email, String password, String name, String lastname) {
         if (userAppRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("User with this email already exists");
         }
         UserApp user = new UserApp();
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setName(name);
+        user.setLastname(lastname);
 
         return userAppRepository.save(user);
+    }
+
+    public UserApp findByEmail(String email) {
+        return userAppRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

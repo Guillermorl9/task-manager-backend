@@ -15,6 +15,7 @@ public class UserApp {
     private Long id;
 
     private String name;
+    private String lastname;
     private String email;
     private String photoUrl;
     private String password;
