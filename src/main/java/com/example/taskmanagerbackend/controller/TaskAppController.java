@@ -3,6 +3,8 @@ package com.example.taskmanagerbackend.controller;
 import com.example.taskmanagerbackend.model.TaskApp;
 import com.example.taskmanagerbackend.service.TaskAppService;
 import lombok.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,18 @@ public class TaskAppController {
     @GetMapping
     public List<TaskApp> getTasksByList(@PathVariable Long listId) {
         return taskAppService.getTasksByList(listId);
+    }
+
+    @GetMapping("/api/tasks/today")
+    public List<TaskApp> getTodayTasks(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        return taskAppService.getTodayTasks(email);
+    }
+
+    @GetMapping("/api/tasks/upcoming")
+    public List<TaskApp> getUpcomingTasksByEmail(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        return taskAppService.getUpcomingTasksByEmail(email);
     }
 
     @PostMapping

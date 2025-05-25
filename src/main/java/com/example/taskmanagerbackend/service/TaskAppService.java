@@ -7,6 +7,7 @@ import com.example.taskmanagerbackend.repository.TaskListAppRepository;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -31,6 +32,17 @@ public class TaskAppService {
 
         taskApp.setTaskListApp(taskList);
         return taskAppRepository.save(taskApp);
+    }
+
+    public List<TaskApp> getTodayTasks(String userEmail) {
+        LocalDate today = LocalDate.now();
+        return taskAppRepository.findByUserEmailAndDate(userEmail, today);
+    }
+
+    public List<TaskApp> getUpcomingTasksByEmail(String email) {
+        LocalDate today = LocalDate.now();
+        LocalDate fourDaysLater = today.plusDays(4);
+        return taskAppRepository.findUpcomingTasksByUserEmail(email, today, fourDaysLater);
     }
 
     public TaskApp updateTask(Long taskId, TaskApp updatedTask) {
