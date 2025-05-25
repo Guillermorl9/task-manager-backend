@@ -16,24 +16,41 @@ public class TaskAppService {
     private final TaskAppRepository taskAppRepository;
     private final TaskListAppRepository taskListAppRepository;
 
-    public List<TaskApp> getTaskListTasks(Long taskListId) {
+    public List<TaskApp> getTasksByList(Long taskListId) {
         return taskAppRepository.findByTaskListAppId(taskListId);
     }
 
     public TaskApp getTaskById(Long id) {
-        return taskAppRepository.findById(id).orElse(null);
+        return taskAppRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task no encontrada con id: " + id));
     }
 
-    public TaskApp saveTask(Long taskListId, TaskApp taskApp) {
+    public TaskApp createTask(Long taskListId, TaskApp taskApp) {
         TaskListApp taskList = taskListAppRepository.findById(taskListId)
-                .orElseThrow(() -> new RuntimeException("Lista no encontrada"));
+                .orElseThrow(() -> new RuntimeException("Lista no encontrada con id: " + taskListId));
 
         taskApp.setTaskListApp(taskList);
         return taskAppRepository.save(taskApp);
     }
 
+    public TaskApp updateTask(Long taskId, TaskApp updatedTask) {
+        TaskApp existingTask = taskAppRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task no encontrada con id: " + taskId));
+
+        existingTask.setTitle(updatedTask.getTitle());
+        existingTask.setDate(updatedTask.getDate());
+        existingTask.setTime(updatedTask.getTime());
+        existingTask.setDescription(updatedTask.getDescription());
+        existingTask.setCompleted(updatedTask.isCompleted());
+
+        return taskAppRepository.save(existingTask);
+    }
 
     public void deleteTask(Long id) {
+        if (!taskAppRepository.existsById(id)) {
+            throw new RuntimeException("Task no encontrada con id: " + id);
+        }
         taskAppRepository.deleteById(id);
     }
 }
+

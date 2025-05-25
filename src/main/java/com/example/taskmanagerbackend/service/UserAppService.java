@@ -19,6 +19,11 @@ public class UserAppService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public UserApp getUserByEmail(String email) {
+        return userAppRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
+
     public UserApp createUser(UserApp userApp) {
         setParentReferences(userApp);
         return userAppRepository.save(userApp);

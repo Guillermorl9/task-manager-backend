@@ -1,28 +1,36 @@
 package com.example.taskmanagerbackend.controller;
 
 import com.example.taskmanagerbackend.model.CategoryApp;
+import com.example.taskmanagerbackend.model.UserApp;
 import com.example.taskmanagerbackend.service.CategoryAppService;
+import com.example.taskmanagerbackend.service.UserAppService;
 import lombok.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users/{userId}/categories/")
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class CategoryAppController {
 
     private final CategoryAppService categoryAppService;
+    private final UserAppService userAppService;
 
     @GetMapping
-    public List<CategoryApp> getUserCategories(@PathVariable Long userId) {
-        return categoryAppService.getCategoriesByUser(userId);
+    public List<CategoryApp> getUserCategories(@AuthenticationPrincipal UserDetails userDetails) {
+        UserApp user = userAppService.getUserByEmail(userDetails.getUsername());
+        return categoryAppService.getCategoriesByUser(user.getId());
     }
 
     @PostMapping
-    public CategoryApp createUserCategory(@PathVariable Long userId, @RequestBody CategoryApp categoryApp) {
-        return categoryAppService.createCategoryForUser(userId, categoryApp);
+    public CategoryApp createUserCategory(@AuthenticationPrincipal UserDetails userDetails,
+                                          @RequestBody CategoryApp categoryApp) {
+        UserApp user = userAppService.getUserByEmail(userDetails.getUsername());
+        return categoryAppService.createCategoryForUser(user.getId(), categoryApp);
     }
 
     @GetMapping("/{categoryId}")
