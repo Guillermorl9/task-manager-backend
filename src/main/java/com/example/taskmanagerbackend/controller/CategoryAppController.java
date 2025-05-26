@@ -1,8 +1,10 @@
 package com.example.taskmanagerbackend.controller;
 
 import com.example.taskmanagerbackend.model.CategoryApp;
+import com.example.taskmanagerbackend.model.TaskListApp;
 import com.example.taskmanagerbackend.model.UserApp;
 import com.example.taskmanagerbackend.service.CategoryAppService;
+import com.example.taskmanagerbackend.service.TaskListAppService;
 import com.example.taskmanagerbackend.service.UserAppService;
 import lombok.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,11 +21,18 @@ public class CategoryAppController {
 
     private final CategoryAppService categoryAppService;
     private final UserAppService userAppService;
+    private final TaskListAppService taskListAppService;
 
     @GetMapping
     public List<CategoryApp> getUserCategories(@AuthenticationPrincipal UserDetails userDetails) {
         UserApp user = userAppService.getUserByEmail(userDetails.getUsername());
         return categoryAppService.getCategoriesByUser(user.getId());
+    }
+
+    @GetMapping("/lists")
+    public List<TaskListApp> getAllTaskLists(@AuthenticationPrincipal UserDetails userDetails) {
+        UserApp user = userAppService.getUserByEmail(userDetails.getUsername());
+        return this.taskListAppService.getAllTaskLists();
     }
 
     @PostMapping

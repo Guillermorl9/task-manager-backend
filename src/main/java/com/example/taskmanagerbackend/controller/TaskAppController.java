@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/lists/{listId}/tasks")
+@RequestMapping("/api/lists")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 public class TaskAppController {
@@ -34,7 +34,7 @@ public class TaskAppController {
         return taskAppService.getUpcomingTasksByEmail(email);
     }
 
-    @PostMapping
+    @PostMapping("/{listId}/tasks")
     public TaskApp createTask(@PathVariable Long listId, @RequestBody TaskApp taskApp) {
         return taskAppService.createTask(listId, taskApp);
     }
@@ -49,7 +49,7 @@ public class TaskAppController {
         return taskAppService.updateTask(taskId, updatedTask);
     }
 
-    @DeleteMapping("/{taskId}")
+    @DeleteMapping("/tasks/{taskId}")
     public void deleteTask(@PathVariable Long taskId) {
         taskAppService.deleteTask(taskId);
     }

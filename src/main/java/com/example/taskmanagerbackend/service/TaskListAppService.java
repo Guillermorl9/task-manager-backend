@@ -19,6 +19,10 @@ public class TaskListAppService {
         return taskListAppRepository.findByCategoryId(categoryId);
     }
 
+    public List<TaskListApp> getAllTaskLists() {
+        return taskListAppRepository.findAll();
+    }
+
     public TaskListApp getTaskListById(Long id) {
         return taskListAppRepository.findById(id).orElse(null);
     }
