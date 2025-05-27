@@ -45,6 +45,10 @@ public class TaskAppService {
         return taskAppRepository.findUpcomingTasksByUserEmail(email, tomorrow, fourDaysLater);
     }
 
+    public List<TaskApp> getAllTasksByEmail(String email) {
+        return taskAppRepository.findByUserEmail(email);
+    }
+
     public TaskApp updateTask(Long taskId, TaskApp updatedTask) {
         TaskApp existingTask = taskAppRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task no encontrada con id: " + taskId));

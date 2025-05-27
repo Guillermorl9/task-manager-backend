@@ -11,6 +11,9 @@ import java.util.List;
 public interface TaskAppRepository extends JpaRepository<TaskApp, Long> {
     List<TaskApp> findByTaskListAppId(Long taskListAppId);
 
+    @Query("SELECT t FROM TaskApp t WHERE t.taskListApp.category.userApp.email = :email")
+    List<TaskApp> findByUserEmail(@Param("email") String email);
+
     @Query("SELECT t FROM TaskApp t WHERE t.taskListApp.category.userApp.email = :email AND t.date = :date")
     List<TaskApp> findByUserEmailAndDate(@Param("email") String email, @Param("date") LocalDate date);
 

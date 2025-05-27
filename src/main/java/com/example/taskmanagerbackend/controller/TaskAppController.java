@@ -34,6 +34,12 @@ public class TaskAppController {
         return taskAppService.getUpcomingTasksByEmail(email);
     }
 
+    @GetMapping("/all-tasks")
+    public List<TaskApp> getAllUserTasks(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        return this.taskAppService.getAllTasksByEmail(email);
+    }
+
     @PostMapping("/{listId}/tasks")
     public TaskApp createTask(@PathVariable Long listId, @RequestBody TaskApp taskApp) {
         System.out.println("Intento para crear tarea, " + taskApp);
