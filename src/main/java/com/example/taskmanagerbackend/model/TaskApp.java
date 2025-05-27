@@ -1,7 +1,10 @@
 package com.example.taskmanagerbackend.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -13,7 +16,9 @@ public class TaskApp {
     private Long id;
 
     private String title;
-    private String date;
+    //private String date;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
     private String time;
     private String description;
     private boolean completed;

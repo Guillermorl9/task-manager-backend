@@ -22,13 +22,13 @@ public class TaskAppController {
         return taskAppService.getTasksByList(listId);
     }
 
-    @GetMapping("/api/tasks/today")
+    @GetMapping("/tasks/today")
     public List<TaskApp> getTodayTasks(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
         return taskAppService.getTodayTasks(email);
     }
 
-    @GetMapping("/api/tasks/upcoming")
+    @GetMapping("/tasks/upcoming")
     public List<TaskApp> getUpcomingTasksByEmail(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
         return taskAppService.getUpcomingTasksByEmail(email);
@@ -36,6 +36,7 @@ public class TaskAppController {
 
     @PostMapping("/{listId}/tasks")
     public TaskApp createTask(@PathVariable Long listId, @RequestBody TaskApp taskApp) {
+        System.out.println("Intento para crear tarea, " + taskApp);
         return taskAppService.createTask(listId, taskApp);
     }
 

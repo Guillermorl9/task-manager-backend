@@ -71,7 +71,7 @@ public class UserAppMapper {
         TaskAppDto dto = new TaskAppDto();
         dto.setId(task.getId());
         dto.setTitle(task.getTitle());
-        dto.setDate(task.getDate());
+        dto.setDate(task.getDate() != null ? task.getDate().toString() : null);
         dto.setTime(task.getTime());
         dto.setDescription(task.getDescription());
         dto.setCompleted(task.isCompleted());

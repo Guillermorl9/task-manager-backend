@@ -40,9 +40,9 @@ public class TaskAppService {
     }
 
     public List<TaskApp> getUpcomingTasksByEmail(String email) {
-        LocalDate today = LocalDate.now();
-        LocalDate fourDaysLater = today.plusDays(4);
-        return taskAppRepository.findUpcomingTasksByUserEmail(email, today, fourDaysLater);
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        LocalDate fourDaysLater = tomorrow.plusDays(3);
+        return taskAppRepository.findUpcomingTasksByUserEmail(email, tomorrow, fourDaysLater);
     }
 
     public TaskApp updateTask(Long taskId, TaskApp updatedTask) {
