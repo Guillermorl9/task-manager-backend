@@ -16,7 +16,6 @@ public class TaskApp {
     private Long id;
 
     private String title;
-    //private String date;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String time;

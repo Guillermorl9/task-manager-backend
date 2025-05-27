@@ -51,7 +51,7 @@ public class TaskAppController {
         return taskAppService.getTaskById(taskId);
     }
 
-    @PutMapping("/{taskId}")
+    @PutMapping("/tasks/{taskId}")
     public TaskApp updateTask(@PathVariable Long taskId, @RequestBody TaskApp updatedTask) {
         return taskAppService.updateTask(taskId, updatedTask);
     }
