@@ -42,7 +42,6 @@ public class TaskAppController {
 
     @PostMapping("/{listId}/tasks")
     public TaskApp createTask(@PathVariable Long listId, @RequestBody TaskApp taskApp) {
-        System.out.println("Intento para crear tarea, " + taskApp);
         return taskAppService.createTask(listId, taskApp);
     }
 

@@ -30,7 +30,11 @@ public class UserService {
     }
 
     public UserApp findByEmail(String email) {
-        return userAppRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userAppRepository.findByEmail(email).orElse(null);
     }
+
+    public UserApp save(UserApp user) {
+        return userAppRepository.save(user);
+    }
+
 }
