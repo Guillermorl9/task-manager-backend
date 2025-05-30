@@ -23,6 +23,10 @@ public class TaskListAppService {
         return taskListAppRepository.findAll();
     }
 
+    public List<TaskListApp> getAllTaskListsByUser(Long userId) {
+        return taskListAppRepository.findByCategoryUserAppId(userId);
+    }
+
     public TaskListApp getTaskListById(Long id) {
         return taskListAppRepository.findById(id).orElse(null);
     }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TaskListAppRepository extends JpaRepository<TaskListApp, Long> {
     List<TaskListApp> findByCategoryId(Long categoryId);
+    List<TaskListApp> findByCategoryUserAppId(Long userId);
 }
