@@ -4,11 +4,9 @@ import com.example.taskmanagerbackend.dto.UserAppDto;
 import com.example.taskmanagerbackend.mapper.UserAppMapper;
 import com.example.taskmanagerbackend.model.UserApp;
 import com.example.taskmanagerbackend.security.JwtUtil;
-import com.example.taskmanagerbackend.service.UserAppService;
 import com.example.taskmanagerbackend.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import lombok.Getter;
@@ -21,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -42,23 +41,39 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+            );
 
-        final String token = jwtUtil.generateToken(authRequest.getEmail());
-        UserApp userApp = userService.findByEmail(authRequest.getEmail());
-        UserAppDto userAppDto = UserAppMapper.toDto(userApp);
-        return ResponseEntity.ok(new LoginResponse(token, userAppDto));
+            final String token = jwtUtil.generateToken(authRequest.getEmail());
+            UserApp userApp = userService.findByEmail(authRequest.getEmail());
+            UserAppDto userAppDto = UserAppMapper.toDto(userApp);
+            return ResponseEntity.ok(new LoginResponse(token, userAppDto));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "Invalid credentials"));
+        }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<LoginResponse> register(@RequestBody AuthRequest authRequest) {
-        UserApp userApp = userService.registerUser(authRequest.getEmail(), authRequest.getPassword(), authRequest.getName(), authRequest.getLastname());
-        System.out.println("Endpoint register: " + authRequest.getEmail() + " " + authRequest.getPassword() + " " + authRequest.getName() + " " + authRequest.getLastname());
-        UserAppDto dto = UserAppMapper.toDto(userApp);
-        final String token = jwtUtil.generateToken(userApp.getEmail());
-        return ResponseEntity.ok(new LoginResponse(token, dto));
+    public ResponseEntity<?> register(@RequestBody AuthRequest authRequest) {
+        try {
+            UserApp existingUser = userService.findByEmail(authRequest.getEmail());
+            if (existingUser != null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(Map.of("message", "Mail is already registered"));
+            }
+
+            UserApp userApp = userService.registerUser(authRequest.getEmail(), authRequest.getPassword(), authRequest.getName(), authRequest.getLastname());
+            UserAppDto dto = UserAppMapper.toDto(userApp);
+            final String token = jwtUtil.generateToken(userApp.getEmail());
+            return ResponseEntity.ok(new LoginResponse(token, dto));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Error when registering the user: " + e.getMessage()));
+        }
     }
 
     @PostMapping("/google")
@@ -73,7 +88,8 @@ public class AuthController {
 
             GoogleIdToken googleIdToken = verifier.verify(idToken);
             if (googleIdToken == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google ID Token");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("message", "Invalid Google token"));
             }
 
             GoogleIdToken.Payload payload = googleIdToken.getPayload();
@@ -99,7 +115,7 @@ public class AuthController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al procesar login con Google: " + e.getMessage());
+                    .body(Map.of("message", "Error processing Google login: " + e.getMessage()));
         }
     }
 
