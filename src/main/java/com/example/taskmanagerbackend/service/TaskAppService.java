@@ -5,6 +5,7 @@ import com.example.taskmanagerbackend.model.TaskListApp;
 import com.example.taskmanagerbackend.repository.TaskAppRepository;
 import com.example.taskmanagerbackend.repository.TaskListAppRepository;
 import lombok.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,6 +33,12 @@ public class TaskAppService {
 
         taskApp.setTaskListApp(taskList);
         return taskAppRepository.save(taskApp);
+    }
+
+    public List<TaskApp> getNextTop4PendingTasks(String email) {
+        Pageable topFour = org.springframework.data.domain.PageRequest.of(0, 4);
+        LocalDate today = LocalDate.now();
+        return taskAppRepository.findNextTop4PendingTasksByEmailAfterToday(email, today, topFour);
     }
 
     public List<TaskApp> getTodayTasks(String userEmail) {

@@ -1,6 +1,7 @@
 package com.example.taskmanagerbackend.repository;
 
 import com.example.taskmanagerbackend.model.TaskApp;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,20 @@ public interface TaskAppRepository extends JpaRepository<TaskApp, Long> {
 
     @Query("SELECT t FROM TaskApp t WHERE t.taskListApp.category.userApp.email = :email AND t.date = :date")
     List<TaskApp> findByUserEmailAndDate(@Param("email") String email, @Param("date") LocalDate date);
+
+    @Query("""
+    SELECT t FROM TaskApp t 
+    WHERE t.taskListApp.category.userApp.email = :email 
+    AND t.completed = false 
+    AND t.date >= :today 
+    ORDER BY t.date ASC
+""")
+    List<TaskApp> findNextTop4PendingTasksByEmailAfterToday(
+            @Param("email") String email,
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
+
 
     @Query("SELECT t FROM TaskApp t " +
             "WHERE t.taskListApp.category.userApp.email = :email " +

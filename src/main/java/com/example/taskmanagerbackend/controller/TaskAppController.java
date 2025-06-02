@@ -31,7 +31,7 @@ public class TaskAppController {
     @GetMapping("/tasks/upcoming")
     public List<TaskApp> getUpcomingTasksByEmail(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
-        return taskAppService.getUpcomingTasksByEmail(email);
+        return taskAppService.getNextTop4PendingTasks(email);
     }
 
     @GetMapping("/all-tasks")
